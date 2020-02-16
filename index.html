@@ -8,10 +8,10 @@
 
 <body>
     Hello, I'm a converter. Please choose the file and submit the form
-    <form method="post" enctype="multipart/form-data">
+    <form method="post" name="convert" enctype="multipart/form-data">
         <div>
             <label for="file">Choose file to convert *</label>
-            <input type="file" id="file" name="file" accept=".csv" required>
+            <input type="file" id="file" name="file" accept=".csv">
         </div>
         <div>
             <label for="categories-mapping">Choose JSON file with categories mapping</label>
@@ -25,6 +25,14 @@
         <div>
             <label for="pko">PKO</label>
             <input type="radio" id="pko" name="bank" value="pko"/>
+        </div>
+        <div>
+            <label for="username">User Name</label>
+            <input type="text" id="username" name="username">
+        </div>
+        <div>
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password">
         </div>
         <div>
             <button>Submit</button>

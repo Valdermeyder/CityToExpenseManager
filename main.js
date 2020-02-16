@@ -3,6 +3,7 @@ const path = require('path')
 const fileUpload = require('express-fileupload');
 const cityConverter = require('./converters/cityConverter')
 const pkoConverter = require('./converters/pkoConverter')
+const bankApi = require('./bankApi')
 
 const app = express()
 const port = process.env.PORT || 3000
@@ -20,7 +21,7 @@ app.get('/', (request, response) => {
 
 const getCategoriesMapping = (file = {}) => file.data && JSON.parse(file.data)
 
-app.post('/', ({ files, body: { bank } }, response) => {
+app.post('/', ({ files, body: { bank, username, password } }, response) => {
 	if (files && files.file) {
 		const converter = bank === 'pko' ? pkoConverter : cityConverter
 		response.set({
@@ -31,8 +32,12 @@ app.post('/', ({ files, body: { bank } }, response) => {
 			.on('finish', () => setTimeout(() => response.end()))
 			.on('error', getHttpErrorHandler(response))
 			.pipe(response);
+	} else if (username && password) {
+		bankApi.callBankApi(username, password)
+			.on('error', getHttpErrorHandler(response))
+			.pipe(response)
 	} else {
-		response.status(400).send('No file was uploaded.')
+		response.status(400).send('Neither file was uploaded nor credentials are provided.')
 	}
 })
 
